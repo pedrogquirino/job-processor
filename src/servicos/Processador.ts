@@ -10,6 +10,6 @@ export class Processador {
     janelaInicio: Date,
     janelaFim: Date
   ): number[][] {
-    return agrupador.classifica(jobs, janelaInicio, janelaFim);
+    return agrupador.agrupa(jobs, janelaInicio, janelaFim);
   }
 }

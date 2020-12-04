@@ -4,8 +4,12 @@ import { IAgrupador } from "./IAgrupador";
 //const TEMPO_ESTIMADO_LIMITE = 8;
 
 export class AgrupadorPorJanelaETempoEstimadoEDataLimite implements IAgrupador {
-  classifica(_jobs: Job[], _janelaInicio: Date, _janelaFim: Date): number[][] {
+  agrupa(_jobs: Job[], _janelaInicio: Date, _janelaFim: Date): number[][] {
     let jobsAgrupados: number[][] = [[]];
+
+    if (_jobs.length === 0) {
+      return jobsAgrupados;
+    }
     return jobsAgrupados;
   }
 }
