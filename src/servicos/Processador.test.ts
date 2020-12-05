@@ -26,7 +26,7 @@ describe("ProcessadorJobs", () => {
       new Job(
         3,
         "Importação de dados de integração",
-        new Date("2021-11-11T08:00:00.000Z"),
+        new Date("2019-11-11T08:00:00.000Z"),
         6
       ),
     ];
@@ -61,7 +61,7 @@ describe("ProcessadorJobs", () => {
       new Job(
         3,
         "Importação de dados de integração",
-        new Date("2021-11-08T15:00:00.000Z"),
+        new Date("2019-11-08T15:00:00.000Z"),
         6
       ),
     ];
@@ -77,7 +77,7 @@ describe("ProcessadorJobs", () => {
   });
 
   test("deveRetornarApenasOsJobsQueTeraoTempoSuficienteParaConclusao", () => {
-    const janelaInicio = new Date("2019-11-10T09:00:00.0000Z");
+    const janelaInicio = new Date("2019-11-10T09:00:00.000Z");
     const janelaFim = new Date("2019-11-11T12:00:00.000Z");
 
     const jobs: Job[] = [
@@ -96,7 +96,7 @@ describe("ProcessadorJobs", () => {
       new Job(
         3,
         "Importação de dados de integração",
-        new Date("2021-11-11T08:00:00.000Z"),
+        new Date("2019-11-11T08:00:00.000Z"),
         6
       ),
     ];

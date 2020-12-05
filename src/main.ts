@@ -1,6 +1,6 @@
-import { Processador } from "./Servicos/Processador";
-import { Job } from "./Jobs/Job";
-import { AgrupadorPorJanelaETempoEstimadoEDataLimite } from "./Jobs/Agrupadores/AgrupadorPorJanelaETempoEstimadoEDataLimite";
+import { Processador } from "./servicos/Processador";
+import { Job } from "./jobs/Job";
+import { AgrupadorPorJanelaETempoEstimadoEDataLimite } from "./jobs/agrupadores/AgrupadorPorJanelaETempoEstimadoEDataLimite";
 
 const jobs: Job[] = [
   new Job(
