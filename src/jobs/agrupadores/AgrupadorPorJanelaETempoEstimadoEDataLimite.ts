@@ -5,7 +5,6 @@ import { IAgrupador } from "./IAgrupador";
 
 export class AgrupadorPorJanelaETempoEstimadoEDataLimite implements IAgrupador {
   agrupa(jobs: Job[], janelaInicio: Date, janelaFim: Date): number[][] {
-    console.log(janelaFim);
     let jobsAgrupados: [number[]] = [[]];
 
     if (jobs.length === 0) {
@@ -35,21 +34,32 @@ export class AgrupadorPorJanelaETempoEstimadoEDataLimite implements IAgrupador {
       return jobsAgrupados;
     }
 
-    let soma = jobslist[0].tempoEstimado;
-
     jobsAgrupados[0][0] = jobslist[0].id;
 
+    let soma = jobslist[0].tempoEstimado;
+    janelaInicio.setHours(janelaInicio.getHours() + jobslist[0].tempoEstimado);
+
+    let horaFimJob = janelaInicio;
+
     for (var i = 1, j = 0; i < jobslist.length; i++) {
+      horaFimJob.setHours(horaFimJob.getHours() + jobslist[i].tempoEstimado);
+
+      let jobFinalizaDentroDaJanelaELimite =
+        horaFimJob <= janelaFim &&
+        horaFimJob <= jobslist[i].dataLimiteConclusao;
+
       soma += jobslist[i].tempoEstimado;
-      if (soma > 8) {
+
+      if (soma > 8 && jobFinalizaDentroDaJanelaELimite) {
         soma = 0;
         j++;
         jobsAgrupados[j] = [];
       }
 
-      jobsAgrupados[j].push(jobslist[i].id);
+      if (jobFinalizaDentroDaJanelaELimite) {
+        jobsAgrupados[j].push(jobslist[i].id);
+      }
     }
-
     return jobsAgrupados;
   }
 }

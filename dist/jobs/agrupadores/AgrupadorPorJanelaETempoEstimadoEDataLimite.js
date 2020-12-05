@@ -6,7 +6,6 @@ var AgrupadorPorJanelaETempoEstimadoEDataLimite = /** @class */ (function () {
     function AgrupadorPorJanelaETempoEstimadoEDataLimite() {
     }
     AgrupadorPorJanelaETempoEstimadoEDataLimite.prototype.agrupa = function (jobs, janelaInicio, janelaFim) {
-        console.log(janelaFim);
         var jobsAgrupados = [[]];
         if (jobs.length === 0) {
             return jobsAgrupados;
@@ -30,16 +29,23 @@ var AgrupadorPorJanelaETempoEstimadoEDataLimite = /** @class */ (function () {
         if (jobslist.length === 0) {
             return jobsAgrupados;
         }
-        var soma = jobslist[0].tempoEstimado;
         jobsAgrupados[0][0] = jobslist[0].id;
+        var soma = jobslist[0].tempoEstimado;
+        janelaInicio.setHours(janelaInicio.getHours() + jobslist[0].tempoEstimado);
+        var horaFimJob = janelaInicio;
         for (var i = 1, j = 0; i < jobslist.length; i++) {
+            horaFimJob.setHours(horaFimJob.getHours() + jobslist[i].tempoEstimado);
+            var jobFinalizaDentroDaJanelaELimite = horaFimJob <= janelaFim &&
+                horaFimJob <= jobslist[i].dataLimiteConclusao;
             soma += jobslist[i].tempoEstimado;
-            if (soma > 8) {
+            if (soma > 8 && jobFinalizaDentroDaJanelaELimite) {
                 soma = 0;
                 j++;
                 jobsAgrupados[j] = [];
             }
-            jobsAgrupados[j].push(jobslist[i].id);
+            if (jobFinalizaDentroDaJanelaELimite) {
+                jobsAgrupados[j].push(jobslist[i].id);
+            }
         }
         return jobsAgrupados;
     };
