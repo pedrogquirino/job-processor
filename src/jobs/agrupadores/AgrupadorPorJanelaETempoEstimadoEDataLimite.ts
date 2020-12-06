@@ -1,12 +1,13 @@
 import { Job } from "../Job";
 import { IAgrupador } from "./IAgrupador";
 
-//const TEMPO_ESTIMADO_LIMITE = 8;
+const TEMPO_ESTIMADO_LIMITE = 8;
 
 export class AgrupadorPorJanelaETempoEstimadoEDataLimite implements IAgrupador {
   agrupa(jobs: Job[], janelaInicio: Date, janelaFim: Date): number[][] {
     let jobsAgrupados: [number[]] = [[]];
 
+    // Retornando uma lista vazia em caso de não ser passado Job
     if (jobs.length === 0) {
       return jobsAgrupados;
     }
@@ -30,8 +31,20 @@ export class AgrupadorPorJanelaETempoEstimadoEDataLimite implements IAgrupador {
         );
       });
 
+    // Retornando uma lista vazia em caso de serem excluidos todos os jobs
     if (jobslist.length === 0) {
       return jobsAgrupados;
+    }
+
+    // Retornando em caso de um único Job a processar
+    if (jobslist.length === 1) {
+      if(jobslist[0].tempoEstimado > TEMPO_ESTIMADO_LIMITE){
+        return jobsAgrupados;
+      }
+      else {
+        jobsAgrupados[0][0] = jobslist[0].id;
+        return jobsAgrupados;
+      }
     }
 
     jobsAgrupados[0][0] = jobslist[0].id;
@@ -50,7 +63,8 @@ export class AgrupadorPorJanelaETempoEstimadoEDataLimite implements IAgrupador {
 
       soma += jobslist[i].tempoEstimado;
 
-      if (soma > 8 && jobFinalizaDentroDaJanelaELimite) {
+      // Caso a soma dos jobs do conjunto alcance o limite, é criado um novo conjunto
+      if (soma > TEMPO_ESTIMADO_LIMITE && jobFinalizaDentroDaJanelaELimite) {
         soma = 0;
         j++;
         jobsAgrupados[j] = [];

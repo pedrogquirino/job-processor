@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AgrupadorPorJanelaETempoEstimadoEDataLimite = void 0;
-//const TEMPO_ESTIMADO_LIMITE = 8;
+var TEMPO_ESTIMADO_LIMITE = 8;
 var AgrupadorPorJanelaETempoEstimadoEDataLimite = /** @class */ (function () {
     function AgrupadorPorJanelaETempoEstimadoEDataLimite() {
     }
     AgrupadorPorJanelaETempoEstimadoEDataLimite.prototype.agrupa = function (jobs, janelaInicio, janelaFim) {
         var jobsAgrupados = [[]];
+        // Retornando uma lista vazia em caso de não ser passado Job
         if (jobs.length === 0) {
             return jobsAgrupados;
         }
@@ -26,8 +27,19 @@ var AgrupadorPorJanelaETempoEstimadoEDataLimite = /** @class */ (function () {
                 janelaInicio.getTime() / 3600000 >=
                 job.tempoEstimado);
         });
+        // Retornando uma lista vazia em caso de serem excluidos todos os jobs
         if (jobslist.length === 0) {
             return jobsAgrupados;
+        }
+        // Retornando em caso de um único Job a processar
+        if (jobslist.length === 1) {
+            if (jobslist[0].tempoEstimado > TEMPO_ESTIMADO_LIMITE) {
+                return jobsAgrupados;
+            }
+            else {
+                jobsAgrupados[0][0] = jobslist[0].id;
+                return jobsAgrupados;
+            }
         }
         jobsAgrupados[0][0] = jobslist[0].id;
         var soma = jobslist[0].tempoEstimado;
@@ -38,7 +50,8 @@ var AgrupadorPorJanelaETempoEstimadoEDataLimite = /** @class */ (function () {
             var jobFinalizaDentroDaJanelaELimite = horaFimJob <= janelaFim &&
                 horaFimJob <= jobslist[i].dataLimiteConclusao;
             soma += jobslist[i].tempoEstimado;
-            if (soma > 8 && jobFinalizaDentroDaJanelaELimite) {
+            // Caso a soma dos jobs do conjunto alcance o limite, é criado um novo conjunto
+            if (soma > TEMPO_ESTIMADO_LIMITE && jobFinalizaDentroDaJanelaELimite) {
                 soma = 0;
                 j++;
                 jobsAgrupados[j] = [];
